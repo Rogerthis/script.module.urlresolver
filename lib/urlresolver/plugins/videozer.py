@@ -58,7 +58,7 @@ class VideozerResolver(Plugin, UrlResolver, PluginSettings):
                                     (e.code, settings_url))
             return False
 
-#find highest quality URL
+        #find highest quality URL
         max_res = [240, 480, 99999][int(self.get_setting('q'))]
         r = re.finditer('"l".*?:.*?"(.+?)".+?"u".*?:.*?"(.+?)"', html)
         chosen_res = 0
@@ -169,27 +169,27 @@ class VideozerResolver(Plugin, UrlResolver, PluginSettings):
         return bin_array
 
     def bin2hex(self,val):
-string = str("")
-for char in val:
-string+=str(char)
-return "%x" % int(string, 2)
+        string = str("")
+        for char in val:
+            string+=str(char)
+        return "%x" % int(string, 2)
 
     def bin(self, x):
-'''
-bin(number) -> string
-
-Stringifies an int or long in base 2.
-'''
-if x < 0: return '-' + bin(-x)
-out = []
-if x == 0: out.append('0')
-while x > 0:
-out.append('01'[x & 1])
-x >>= 1
-pass
-try: return '0b' + ''.join(reversed(out))
-except NameError, ne2: out.reverse()
-return '0b' + ''.join(out)
+        '''
+        bin(number) -> string
+        
+        Stringifies an int or long in base 2.
+        '''
+        if x < 0: return '-' + bin(-x)
+        out = []
+        if x == 0: out.append('0')
+        while x > 0:
+            out.append('01'[x & 1])
+            x >>= 1
+            pass
+        try: return '0b' + ''.join(reversed(out))
+        except NameError, ne2: out.reverse()
+        return '0b' + ''.join(out)
 
     def __getKey(self, nbr):
         if nbr == '1': return 215678

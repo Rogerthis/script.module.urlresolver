@@ -53,10 +53,10 @@ class VideobbResolver(Plugin, UrlResolver, PluginSettings):
             common.addon.log_error('videobb: stream url part1 not found')
             return False
 
-# Try to load the datas from json.
+        # Try to load the datas from json.
         aData = loads(json)
 
-# Decode the link from the json data settings
+        # Decode the link from the json data settings
         spn_ik = unhexlify(self.__decrypt(aData["settings"]["login_status"]["spen"], aData["settings"]["login_status"]["salt"], 950569)).split(';')
         spn = spn_ik[0].split('&')
         ik = spn_ik[1]
@@ -151,27 +151,27 @@ class VideobbResolver(Plugin, UrlResolver, PluginSettings):
         return bin_array
 
     def bin2hex(self,val):
-string = str("")
-for char in val:
-string+=str(char)
-return "%x" % int(string, 2)
+        string = str("")
+        for char in val:
+            string+=str(char)
+        return "%x" % int(string, 2)
 
     def bin(self, x):
-'''
-bin(number) -> string
+        '''
+        bin(number) -> string
 
-Stringifies an int or long in base 2.
-'''
-if x < 0: return '-' + bin(-x)
-out = []
-if x == 0: out.append('0')
-while x > 0:
-out.append('01'[x & 1])
-x >>= 1
-pass
-try: return '0b' + ''.join(reversed(out))
-except NameError, ne2: out.reverse()
-return '0b' + ''.join(out)
+        Stringifies an int or long in base 2.
+        '''
+        if x < 0: return '-' + bin(-x)
+        out = []
+        if x == 0: out.append('0')
+        while x > 0:
+            out.append('01'[x & 1])
+            x >>= 1
+            pass
+        try: return '0b' + ''.join(reversed(out))
+        except NameError, ne2: out.reverse()
+        return '0b' + ''.join(out)
 
     def __get_key(self, nbr):
         if nbr == '1': return 226593
