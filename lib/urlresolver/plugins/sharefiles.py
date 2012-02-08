@@ -1,19 +1,19 @@
 """
-    urlresolver XBMC Addon
-    Copyright (C) 2011 t0mm0
+urlresolver XBMC Addon
+Copyright (C) 2011 t0mm0
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 from t0mm0.common.net import Net
@@ -49,16 +49,16 @@ class SharefilesResolver(Plugin, UrlResolver, PluginSettings):
                                     (e.code, web_url))
             return False
 
-        #send all form values
+        #send all form values except premium
         sPattern = '<input.*?name="([^"]+)".*?value=([^>]+)>'
         r = re.findall(sPattern, html)
         data = {}
         if r:
             for match in r:
                 name = match[0]
+                if 'premium' in name : continue
                 value = match[1].replace('"','')
                 data[name] = value
-
             html = self.net.http_POST(web_url, data).content
         else:
             common.addon.log_error(self.name + ': no fields found')
