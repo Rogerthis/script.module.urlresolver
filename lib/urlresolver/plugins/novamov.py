@@ -48,7 +48,14 @@ class NovamovResolver(Plugin, UrlResolver, PluginSettings):
         if r:
             filename, filekey = r.groups()
         else:
-            common.addon.log_error('novamov: filename and filekey not found')
+            r = re.search('file no longer exists',html)
+            if r:
+                msg = ['This file no longer exists']
+                common.addon.show_ok_dialog(msg, 'NovaMov', True)
+                msg = 'Host: %s\n ID: %s' % (host,media_id)
+                common.addon.log_error('novamov: filename and filekey not found')
+            else:
+                common.addon.log_error('novamov: filename and filekey not found')
             return False
         
         #get stream url from api
@@ -69,6 +76,10 @@ class NovamovResolver(Plugin, UrlResolver, PluginSettings):
             if r:
                 msg = ['This file no longer exists']
                 common.addon.show_ok_dialog(msg, 'NovaMov', True)
+                msg = 'Host: %s\n ID: %s' % (host,media_id)
+                common.addon.log_error('novamov: filename and filekey not found')
+            else:
+                common.addon.log_error('novamov: filename and filekey not found')
             return False
             
         return stream_url
