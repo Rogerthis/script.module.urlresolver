@@ -65,7 +65,10 @@ class NovamovResolver(Plugin, UrlResolver, PluginSettings):
         if r:
             stream_url = r.group(1)
         else:
-            common.addon.log_error('novamov: stream url not found')
+            r = re.search('file no longer exists',html)
+            if r:
+                msg = ['This file no longer exists']
+                common.addon.show_ok_dialog(msg, 'NovaMov', True)
             return False
             
         return stream_url
