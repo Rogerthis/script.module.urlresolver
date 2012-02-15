@@ -44,23 +44,27 @@ class UfliqResolver(Plugin, UrlResolver, PluginSettings):
         web_url = self.get_url(host, media_id)
 
         try:
-            html = self.net.http_GET(web_url).content
+            resp = self.net.http_GET(web_url)
+            html = resp.content
+            post_url = resp.get_url()
+            print post_url
+
+            form_values = {}
+            for i in re.finditer('<input type="hidden" name="(.+?)" value="(.+?)">', html):
+                form_values[i.group(1)] = i.group(2)
+
+            html = self.net.http_POST(post_url, form_data=form_values).content
+
+
         except urllib2.URLError, e:
-            common.addon.log_error(self.name + ': got http error %d fetching %s' %
-                                    (e.code, web_url))
+            common.addon.log_error('gorillavid: got http error %d fetching %s' %
+                                  (e.code, web_url))
             return False
 
-        # get url from packed javascript
-        sPattern = "<script type='text/javascript'>eval.*?return p}\((.*?)\)\s*</script>"
-        r = re.search(sPattern, html, re.DOTALL + re.IGNORECASE)
+        r = re.search('url: \'(.+?)\', autoPlay: false,onBeforeFinish:', html)
+        print r
         if r:
-            sJavascript = r.group(1)
-            sUnpacked = jsunpack.unpack(sJavascript)
-            print(sUnpacked)
-            sPattern = ".addVariable\(\s*'file'\s*,\s*'([^']+)'\s*\)"
-            r = re.search(sPattern, sUnpacked)
-            if r:
-                return r.group(1)
+            return r.group(1)
 
         return False
 
